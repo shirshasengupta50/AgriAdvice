@@ -16,7 +16,9 @@ let latestMoisture = null; // Will store moisture received from ESP32
 app.post('/update-moisture', (req, res) => {
     const { moisture } = req.body;
 
-    console.log(moisture/4095);
+    moisture = (1-(moisture/4095))*100;
+
+    console.log(moisture);
 
     if (moisture === undefined) {
         return res.status(400).json({ message: 'Moisture value missing' });
