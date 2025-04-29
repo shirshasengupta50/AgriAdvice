@@ -11,7 +11,7 @@ const App = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5555/get-advice', { crop, pH });
+      const response = await axios.post('https://agriadvice.onrender.com/get-advice', { crop, pH });
       setAdvice(response.data);
     } catch (error) {
       console.error('Error fetching advice:', error);
