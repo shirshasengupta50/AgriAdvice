@@ -14,7 +14,7 @@ let latestMoisture = null; // Will store moisture received from ESP32
 
 // 1. ESP32 sends soil moisture here
 app.post('/update-moisture', (req, res) => {
-    const { moisture } = req.body;
+    let { moisture } = req.body;
 
     moisture = (1-(moisture/4095))*100;
 
