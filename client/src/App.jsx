@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const App = () => {
@@ -6,6 +6,33 @@ const App = () => {
   const [pH, setSoilPh] = useState('');
   const [advice, setAdvice] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [temperature, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
+  const [uvIndex, setUvIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const weatherResponse = await axios.get('https://api.open-meteo.com/v1/forecast', {
+          params: {
+            latitude: 23.387224,
+            longitude: 85.392290,
+            current: 'temperature_2m,relative_humidity_2m,uv_index',
+          },
+        });
+
+        const current = weatherResponse.data.current;
+        setTemperature(current.temperature_2m);
+        setHumidity(current.relative_humidity_2m);
+        setUvIndex(current.uv_index);
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +58,16 @@ const App = () => {
           </h1>
         </div>
 
+        {/* Weather Information */}
+        <div className="bg-green-100 p-6 rounded-xl shadow-inner mb-6">
+          <h2 className="text-2xl font-bold text-green-700 mb-4">Current Weather</h2>
+          <ul className="space-y-2 text-green-800 text-lg">
+            <li>🌡️ Temperature: {temperature !== null ? `${temperature} °C` : 'Loading...'}</li>
+            <li>💧 Humidity: {humidity !== null ? `${humidity} %` : 'Loading...'}</li>
+            <li>🌞 UV Index: {uvIndex !== null ? uvIndex : 'Loading...'}</li>
+          </ul>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Crop Selector */}
           <div className="flex flex-col">
@@ -45,7 +82,6 @@ const App = () => {
               required
             >
               <option value="">Select a Crop</option>
-              {/* crop options */}
               <option value="Coffee">Coffee</option>
               <option value="Tobacco">Tobacco</option>
               <option value="Jute">Jute</option>
