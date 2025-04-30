@@ -20,7 +20,6 @@ app.post('/update-moisture', (req, res) => {
 
     console.log("yes");
 
-
     console.log(moisture);
 
     if (moisture === undefined) {
