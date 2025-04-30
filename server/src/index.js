@@ -18,7 +18,6 @@ app.post('/update-moisture', (req, res) => {
 
     moisture = (1-(moisture/4095))*100;
 
-    
     console.log("yes");
 
     console.log(moisture);
